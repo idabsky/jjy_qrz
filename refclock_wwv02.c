@@ -94,12 +94,11 @@
 #define	MAXCLP		100	/* max clips above reference per s */
 #define MAXSNR		40.	/* max SNR reference */
 #define MAXFREQ		1.5	/* max frequency tolerance (187 PPM) */
-#define DATCYC		500	/* data filter cycles */
+#define DATCYC		(800 - 500)	/* data filter cycles */
 #define DATSIZ		(DATCYC * MS) /* data filter size */
-/* jjy is shortr than wwv #define SYNCYC		800	 minute filter cycles */
-#define SYNCYC		200	/* minute filter cycles */
+#define SYNCYC		800	/* minute filter cycles */
 #define SYNSIZ		(SYNCYC * MS) /* minute filter size */
-#define TCKCYC		50	/* tick filter cycles */
+#define TCKCYC		5  	/* tick filter cycles */
 #define TCKSIZ		(TCKCYC * MS) /* tick filter size */
 #define NCHAN		1	/* number of radio channels */
 #define	AUDIO_PHI	5e-6	/* dispersion growth factor */
@@ -177,12 +176,16 @@
 #define ATHR		2500.	/* QRZ minute sync threshold */
 #define ASNR		20.	/* QRZ minute sync SNR threshold (dB) */
 #define QTHR		2500.	/* QSY minute sync threshold */
-#define QSNR		20.	/* QSY minute sync SNR threshold (dB) */
+/* #define QSNR		20.*/
+	/* QSY minute sync SNR threshold (dB) */
+#define QSNR		5.	/* QSY minute sync SNR threshold (dB) */
 #define STHR		2500.	/* second sync threshold */
 #define	SSNR		15.	/* second sync SNR threshold (dB) */
 #define SCMP		10 	/* second sync compare threshold */
 #define DTHR		1000.	/* bit threshold */
-#define DSNR		10.	/* bit SNR threshold (dB) */
+/* #define DSNR		10.*/
+	/* bit SNR threshold (dB) */
+#define DSNR		5.	/* bit SNR threshold (dB) */
 #define AMIN		3	/* min bit count */
 #define AMAX		6	/* max bit count */
 #define BTHR		1000.	/* digit threshold */
@@ -299,65 +302,65 @@ struct progx {
 #define YR		7	/* year digits (2) */
 
 struct progx progx[] = {
-	{SYNC2,	0},		/* 0 latch minute sync pulse */
-	{SYNC3,	0},		/* 1 latch data pulse */
-	{MSCBIT, DST2},		/* 2 dst2 */
-	{MSCBIT, SECWAR},	/* 3 lw */
-	{COEF,	0},		/* 4 1 year units */
-	{COEF,	1},		/* 5 2 */
-	{COEF,	2},		/* 6 4 */
-	{COEF,	3},		/* 7 8 */
-	{DECIM9, YR},		/* 8 */
-	{IDLE,	0},		/* 9 p1 */
-	{COEF1,	0},		/* 10 1 minute units */
-	{COEF1,	1},		/* 11 2 */
-	{COEF1,	2},		/* 12 4 */
-	{COEF1,	3},		/* 13 8 */
-	{DECIM9, MN},		/* 14 */
-	{COEF,	0},		/* 15 10 minute tens */
-	{COEF,	1},		/* 16 20 */
-	{COEF,	2},		/* 17 40 */
-	{COEF2,	3},		/* 18 80 (not used) */
-	{DECIM6, MN + 1},	/* 19 p2 */
-	{COEF,	0},		/* 20 1 hour units */
-	{COEF,	1},		/* 21 2 */
-	{COEF,	2},		/* 22 4 */
-	{COEF,	3},		/* 23 8 */
-	{DECIM9, HR},		/* 24 */
-	{COEF,	0},		/* 25 10 hour tens */
-	{COEF,	1},		/* 26 20 */
-	{COEF2,	2},		/* 27 40 (not used) */
-	{COEF2,	3},		/* 28 80 (not used) */
-	{DECIM2, HR + 1},	/* 29 p3 */
-	{COEF,	0},		/* 30 1 day units */
-	{COEF,	1},		/* 31 2 */
-	{COEF,	2},		/* 32 4 */
-	{COEF,	3},		/* 33 8 */
-	{DECIM9, DA},		/* 34 */
-	{COEF,	0},		/* 35 10 day tens */
-	{COEF,	1},		/* 36 20 */
-	{COEF,	2},		/* 37 40 */
-	{COEF,	3},		/* 38 80 */
-	{DECIM9, DA + 1},	/* 39 p4 */
-	{COEF,	0},		/* 40 100 day hundreds */
-	{COEF,	1},		/* 41 200 */
-	{COEF2,	2},		/* 42 400 (not used) */
-	{COEF2,	3},		/* 43 800 (not used) */
-	{DECIM3, DA + 2},	/* 44 */
+	{SYNC3,	0},		/* 0 M_jjy 200ms */
+	{COEF,	2},		/* 1  40 minute tens */
+	{COEF,	1},		/* 2  20 */
+	{COEF,	0},		/* 3  10 */
+	{DECIM6, MN + 1 },	/* 4   */
+	{COEF1,	3},		/* 5 8 minute units */
+	{COEF1,	2},		/* 6  4 */
+	{COEF1,	1},		/* 7  2 */
+	{COEF1,	0},		/* 8  1 */
+	{DECIM9, MN + 0},	/* 9 p1 */
+	{IDLE,	0},		/* 10  */
+	{IDLE,	0},		/* 11  */
+	{COEF,	1},		/* 12 20 hour tens */
+	{COEF,	0},		/* 13 10 */
+	{DECIM2, HR + 1},	/* 14 p3 */
+	{COEF,	3},		/* 20 8 hour units */
+	{COEF,	2},		/* 21 4 */
+	{COEF,	1},		/* 22 2 */
+	{COEF,	0},		/* 23 1 */
+	{DECIM9, HR},		/* 19 */
+        {COEF,  0},             /* 20 100 day hundreds */
+        {COEF,  1},             /* 21 200 */
+        {COEF2, 2},             /* 22 400 (not used) */
+        {COEF2, 3},             /* 23 800 (not used) */
+        {DECIM3, DA + 2},       /* 24 */
+	{COEF,  3},             /* 25 80 day tens */
+	{COEF,  2},             /* 26 40 */
+	{COEF,  1},             /* 27 20 */
+	{COEF,  0},             /* 28 10 */
+	{DECIM9, DA + 1},       /* 29 p3 */
+	{COEF,  3},             /* 30 8 day units */
+	{COEF,  2},             /* 31 4 */
+	{COEF,  1},             /* 32 2 */
+	{COEF,  0},             /* 33 1 */
+	{DECIM9, DA},           /* 34 */
+	{IDLE,	0},		/* 35 */
+	{COEF,	0},		/* 36 pa1 */
+	{COEF,	1},		/* 37 pa2 */
+	{IDLE,	0},		/* 38 */
+	{IDLE,	0},		/* 39 p4 */
+	{IDLE,	0},		/* 40 */
+	{COEF,	3},		/* 51 80 year tens */
+	{COEF,	2},		/* 52 40 */
+	{COEF,	1},		/* 53 20 */
+	{COEF,	0},		/* 54 10 */
+	{MSC20,	3},		/* 45 8 year units */
+	{COEF,	2},		/* 46 4 */
+	{COEF,	1},		/* 47 2 */
+	{COEF,	0},		/* 48 1 */
+	{DECIM9, YR},		/* 49 p5 */
+	{IDLE,	0},		/* 50 */
+	{IDLE,	0},		/* 51 */
+	{IDLE,	0},		/* 52 */
+	{MSCBIT, DST2},		/* 53 dst2 */
+	{MSCBIT, SECWAR},	/* 54 lw */
 	{IDLE,	0},		/* 45 */
 	{IDLE,	0},		/* 46 */
 	{IDLE,	0},		/* 47 */
-	{IDLE,	0},		/* 48 */
-	{IDLE,	0},		/* 49 p5 */
-	{MSCBIT, DUTS},		/* 50 dut+- */
-	{COEF,	0},		/* 51 10 year tens */
-	{COEF,	1},		/* 52 20 */
-	{COEF,	2},		/* 53 40 */
-	{COEF,	3},		/* 54 80 */
-	{MSC20, DST1},		/* 55 dst1 */
-	{MSCBIT, DUT1},		/* 56 0.1 dut */
-	{MSCBIT, DUT2},		/* 57 0.2 */
-	{MSC21, DUT4},		/* 58 0.4 QSY probe channel */
+	{SYNC2,	0},		/* 48 */
 	{MIN1,	0},		/* 59 p6 latch time */
 	{MIN2,	0}		/* 60 leap second */
 };
@@ -467,7 +470,7 @@ struct decvec {
  */
 struct sync {
 	double	epoch;		/* accumulated epoch differences */
-	double	maxeng;		/* sync max energy */
+	double  maxeng;         /* sync max energy */
 	double	noieng;		/* sync noise energy */
 	long	pos;		/* max amplitude position */
 	long	lastpos;	/* last max position */
@@ -896,7 +899,7 @@ wwv_receive(
 		asm("   movb %al, (%ecx)  \n\t");   
 		asm("   incl %ecx  \n\t");   
 		asm("   movb $00, (%ecx)  \n\t");  */
-	if( bufcnt < 10 ) {
+	if( 0 ) {
 /*	fbdp[ bufcnt & 0x3 ] =128+(sample / 8); */
 	   fbdp[ bufcnt & 0x3 ] = ~*dpt;  
 	wpi=wpi+1;
@@ -1223,12 +1226,12 @@ wwv_rf(
 
 	i = up->datapt;
 	up->datapt = (up->datapt + IN1000) % 80;
-	dtemp = sintab[i] * syncx / (MS / 2. );
+	dtemp = sintab[i] * syncx / (MS / 2.  * DATCYC);
 	up->irig -= ibuf[iptr];
 	ibuf[iptr] = dtemp;
 	up->irig += dtemp;
 	i = (i + 20) % 80;
-	dtemp = sintab[i] * syncx / (MS / 2. );
+	dtemp = sintab[i] * syncx / (MS / 2.  * DATCYC);
 	up->qrig -= qbuf[iptr];
 	qbuf[iptr] = dtemp;
 	up->qrig += dtemp;
@@ -1270,7 +1273,7 @@ wwv_rf(
 	if (up->mphase == 0) {
 		up->watch++;
 		if(!(up->status & MSYNC)) {
-	              for( i=0; i<SYNSIZ;i=i+8) { 
+	              for( i=0; i<SYNSIZ;i=i+800) { 
 	               
 	msyslog(LOG_NOTICE, " epoch%d",epoch);
    	msyslog(LOG_NOTICE,"  %4d:  %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f %5.2f ",i, ((double)up->watch2),
@@ -1327,13 +1330,22 @@ cibuf[i],cibuf[i+1],cibuf[i+2],cibuf[i+3],cibuf[i+4],cibuf[i+5],cibuf[i+6],cibuf
 		wwv_epoch(peer);
 	} else if (up->sptr != NULL) {
 		sp = up->sptr;
-		if (sp->metric >= TTHR && epoch == sp->mepoch % SECOND) 		    {
-			up->rsec = (60 - up->watch2 - sp->mepoch / SECOND) % 60;
+		if (sp->metric >= TTHR && epoch == sp->mepoch % SECOND)
+ 		    {
+			if (up->watch2 >= 1 ) {
+				up->mphase = up->mphase - SECOND;
+				sp->mepoch = sp->mepoch - SECOND;
+				if (up->mphase < 0)
+					up->mphase += MINUTE;
+				if (sp->mepoch < 0)
+					sp->mepoch += MINUTE;
+			}
+			up->rsec = (60 - sp->mepoch / SECOND) % 60;
 			up->rphase = 0;  /*  200*ms , 500*ms etc. */
 			up->status |= MSYNC;
 			up->watch = 0;
 			if (!(up->status & SSYNC))
-				up->repoch = up->yepoch = epoch;
+				up->repoch = up->yepoch = epoch; 
 			else
 				up->repoch = up->yepoch;
 
@@ -1344,7 +1356,6 @@ cibuf[i],cibuf[i+1],cibuf[i+2],cibuf[i+3],cibuf[i+4],cibuf[i+5],cibuf[i+6],cibuf
 	/*
 	 *  5-ms matched filters was deprecated . Station is not selected(set NCHAN to 1).This
 	 * only if the station has been reliably determined.
-	 */
 	if (up->status & SELV) {
 		pdelay = (int)(pp->fudgetime1 * SECOND);
 		mfsync = sqrt(csiamp * csiamp + csqamp * csqamp) /
@@ -1357,6 +1368,7 @@ cibuf[i],cibuf[i+1],cibuf[i+2],cibuf[i+3],cibuf[i+4],cibuf[i+5],cibuf[i+6],cibuf
 		pdelay = 0;
 		mfsync = 0;
 	}
+	 */
 
 	/*
 	 * Enhance the seconds sync pulse using a 1-s (8000-sample) comb
@@ -1368,7 +1380,6 @@ cibuf[i],cibuf[i+1],cibuf[i+2],cibuf[i+3],cibuf[i+4],cibuf[i+5],cibuf[i+6],cibuf
 	 * sample 6 ms before it, so if we slip more than a cycle the
 	 * SNR should plummet. The signal is scaled to produce unit
 	 * energy at the maximum value.
-	 */
 	dtemp = (epobuf[epoch] += (mfsync - epobuf[epoch]) /
 	    up->avgint);
 	if (dtemp > epomax) {
@@ -1387,7 +1398,14 @@ cibuf[i],cibuf[i+1],cibuf[i+2],cibuf[i+3],cibuf[i+4],cibuf[i+5],cibuf[i+6],cibuf
 		epopos -= pdelay + TCKCYC * MS;
 		if (epopos < 0)
 			epopos += SECOND;
-		wwv_endpoc(peer, epopos);
+	 */
+	if (epoch == 0) {
+		up->epomax =  up->datsig;
+		up->eposnr =  up->datsnr;
+		epopos = up->repoch  - 5 * MS;
+		if (epopos < 0)
+			epopos += SECOND;
+		wwv_endpoc(peer, epopos );
 		if (!(up->status & SSYNC))
 			up->alarm |= SYNERR;
 		epomax = 0;
@@ -1444,7 +1462,7 @@ wwv_qrz(
 		sp->maxeng = sp->amp;
 		sp->pos = epoch;
 	/* mod 80 */
-		if ((epoch % 80) == 2 ) printf(" Enterwwv_qrz %d  sp->amp%5.2f   ",epoch, sp->amp);
+		if ((epoch % 80) == 2 ) printf(" Enter wwv_qrz %d  sp->amp%5.2f   ",epoch, sp->amp);
 	}
 	sp->noieng += sp->amp;
 
@@ -1455,6 +1473,11 @@ wwv_qrz(
 	 * jitter. When calculating the SNR, subtract the pulse energy
 	 * from the total noise energy and then normalize.
 	 */
+	if (up->mphase % SECOND == 0) {
+		sp->synsnr = wwv_snr(sp->synmax, (sp->noieng -
+		    sp->synmax) / MINUTE);
+			msyslog(LOG_NOTICE,"jjyv8 qrz%5.0f/%5.0f : %5.0f", sp->maxeng,sp->synsnr ,sp->noieng);
+	}
 	if (up->mphase == 0) {
 		sp->synmax = sp->maxeng;
 		sp->synsnr = wwv_snr(sp->synmax, (sp->noieng -
@@ -1487,12 +1510,13 @@ wwv_qrz(
 			    up->clipcnt,  epoch);
 			record_clock_stats(&peer->srcadr, tbuf);
 		msyslog(LOG_NOTICE,"wwwv8 qrz%5.0f\n", sp->metric );
+				printf("%s\n", tbuf);
 #ifdef DEBUG
 			if (debug)
 				printf("%s\n", tbuf);
 #endif /* DEBUG */
 		}
-		sp->maxeng = sp->noieng = 0;
+		sp->noieng = sp->maxeng =0 ;
 	}
 }
 
@@ -1551,6 +1575,7 @@ wwv_endpoc(
 	if (up->epomax < STHR || up->eposnr < SSNR) {
 		up->status &= ~(SSYNC | FGATE);
 		avgcnt = syncnt = maxrun = 0;
+		printf("  endpoc:threshold below %d", epopos);
 		return;
 	}
 	if (!(up->status & (SELV | SELH)))
@@ -1765,10 +1790,11 @@ wwv_epoch(
 		cp->wwv.syneng = cp->wwv.amp;
 	if (cp->wwvh.amp > cp->wwvh.syneng)
 		cp->wwvh.syneng = cp->wwvh.amp;
-	if (up->rphase == 800 * MS)
+	/*
+	 *if (up->rphase == 800 * MS)
 		up->repoch = up->yepoch;
 
-	/*
+	
 	 * Use the signal amplitude at epoch 15 ms as the noise floor.
 	 * This gives a guard time of +-15 ms from the beginning of the
 	 * second until the second pulse rises at 30 ms. There is a
@@ -1777,7 +1803,7 @@ wwv_epoch(
 	 * AGC to stabilize, but as early as possible if the second
 	 * epoch is not exact.
 	 */
-	if (up->rphase == 15 * MS)
+	if (up->rphase == 950 * MS)
 		sigmin = sigzer = sigone = up->irig;
 
 	/*
@@ -1813,9 +1839,9 @@ wwv_epoch(
 	 /* weighted 800ms
 	else if (up->rphase == 500 * MS)
 	*/
-	else if (up->rphase == 800 * MS)
+	else if (up->rphase == 800 * MS) {
 		sigone = up->irig;
-
+	}
 	/*
 	 * At the end of the second crank the clock state machine and
 	 * adjust the codec gain. Note the epoch is buffered from the
@@ -1834,8 +1860,9 @@ wwv_epoch(
 	if (up->mphase % SECOND == up->repoch) {
 		up->status &= ~(DGATE | BGATE);
 		engmin = sqrt(up->irig * up->irig + up->qrig *
-		    up->qrig);
+		    up->qrig) / 2;
 		up->datsig = engmax;
+
 		up->datsnr = wwv_snr(engmax, engmin);
 
 		/*
@@ -1845,7 +1872,7 @@ wwv_epoch(
 		 */
 		if (engmax < DTHR || up->datsnr < DSNR) {
 			up->status |= DGATE;
-			wwv_rsec(peer, 0);
+			wwv_rsec(peer, 0); 
 		} else {
 			sigzer -= sigone;
 			sigone -= sigmin;
@@ -1979,7 +2006,6 @@ wwv_rsec(
 
 		/*
 		 * WWVH station
-		 */
 		rp = &cp->wwvh;
 		rp->synsnr = wwv_snr(rp->synmax, rp->amp);
 		rp->reach <<= 1;
@@ -1991,21 +2017,20 @@ wwv_rsec(
 			rp->count++;
 		}
 		rp->metric = wwv_metric(rp);
+		 */
 		if (pp->sloppyclockflag & CLK_FLAG4) {
-			sprintf(tbuf,
-			    "wwv5 %04x %3d %4d %.0f/%.1f %.0f/%.1f %s %04x %.0f %.0f/%.1f %s %04x %.0f %.0f/%.1f",
+			msyslog(LOG_NOTICE,
+			"wwv5 %04x %3d %4d %.0f/%.1f %.0f/%.1f %s %04x(hex) metric%.0f %.0f/%.1f ",
 			    up->status, up->gain, up->yepoch,
 			    up->epomax, up->eposnr, up->datsig,
 			    up->datsnr,
 			    sp->refid, sp->reach & 0xffff,
-			    sp->metric, sp->synmax, sp->synsnr,
-			    rp->refid, rp->reach & 0xffff,
-			    rp->metric, rp->synmax, rp->synsnr);
+			    sp->metric, sp->synmax, sp->synsnr );
 			record_clock_stats(&peer->srcadr, tbuf);
-		msyslog(LOG_NOTICE,"wwwv5 \n");
+/*		msyslog(LOG_NOTICE,"wwv5 up.mpha %6d sp.epo%6d  ",up->mphase,sp->mepoch); */
 #ifdef DEBUG
-			if (debug)
-				printf("%s\n", tbuf);
+			/*if (debug)
+			 *	printf("%s\n", tbuf); */
 #endif /* DEBUG */
 		}
 		up->errcnt = up->digcnt = up->alarm = 0;
@@ -2092,9 +2117,14 @@ wwv_rsec(
 	 * raise the BGATE bit. The design is intended to avoid
 	 * integrating noise under low SNR conditions.
 	 */
-	case MSC20:			/* 55 */
+	case MSC20:			/* 45 */
 		wwv_corr4(peer, &up->decvec[YR + 1], bcddld, bcd9);
 		/* fall through */
+		if (up->status & DSYNC)
+			bcddld[arg] = bit;
+		else
+			bcddld[arg] = 0;
+		break;
 
 	case MSCBIT:			/* 2-3, 50, 56-57 */
 		if (bitvec[nsec] > BTHR) {
@@ -2167,7 +2197,7 @@ wwv_rsec(
 	if ((pp->sloppyclockflag & CLK_FLAG4) && !(up->status &
 	    DSYNC)) {
 		sprintf(tbuf,
-		    "wwv3 %2d %04x %3d %4d %5.0f %5.1f %5.0f %5.1f %5.0f",
+		    "wwv3 %2d %04x %3d %4d   %5.0f %5.1f   %5.0f %5.1f bit=%5.0f",
 		    nsec, up->status, up->gain, up->yepoch, up->epomax,
 		    up->eposnr, up->datsig, up->datsnr, bit);
 		record_clock_stats(&peer->srcadr, tbuf);
