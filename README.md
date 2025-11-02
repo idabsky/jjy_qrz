@@ -22,5 +22,9 @@ Thanks to
 
 https://akebi.jp/temp/jjy/
 
+and ka9q
+,just type on urban distro_pulseAudio(Warning:outputs) 
+WWV-master$ ./wwvsim | paplay --rate=16000
+https://github.com/jj1bdx/WWV/tree/master
 https://wwv.mcodes.org/
 
