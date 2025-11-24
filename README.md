@@ -4,7 +4,7 @@ SNR calculations are not yet solved
   jjy signal(1000Hz):38second/60sec.
 
 
-Status(1/24/2005)
+Status(11/24/2005)
 MSYNC  work sometimes the threshold is exceeded and the process fails. In that case restart ntpd. 
 SSYNC  work debug code still remains
 DSYNC  work
