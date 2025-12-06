@@ -105,7 +105,7 @@
 #define DCHAN		0	/* default radio channel (15 Mhz) */
 #define DGAIN		5.	/* subcarrier gain */
 #define	FREQ_OFFSET	0.	/* codec frequency correction (PPM) */
-#define JJY_SILENCE_THR 1800.0
+#define JJY_SILENCE_THR 1900.0
 #define JJY_SILENCE_MS  (400)
 
 /*
@@ -173,7 +173,7 @@
  * adventurous side in the interest of the highest sensitivity.
  */
 #define MTHR		13.	/* minute sync gate (percent) */
-#define TTHR		25.	/* minute sync threshold (percent) */
+#define TTHR		50.	/* minute sync threshold (percent) */
 #define AWND		10	/* minute sync jitter threshold (ms) */
 #define ATHR		2500.	/* QRZ minute sync threshold */
 #define ASNR		20.	/* QRZ minute sync SNR threshold (dB) */
@@ -1357,6 +1357,7 @@ wwv_rf(
 	* As with wwv SNR should plummet. The signal is scaled to produce unit
 	* energy at the maximum value.
 	 */
+
 	if ((up->status & MSYNC)) {
 	 
 	if (up->rsec == 0 ||up->rsec == 9||up->rsec == 19||up->rsec == 29 ||
@@ -1425,7 +1426,28 @@ wwv_rf(
 			wwv_gain(peer);
 	   }  
 	}   /* every 10second if */
-	}   /* MSYNCRO engage if */
+	if (up->rsec == 58 ){
+		/* snr > 9 && alarm bit lit then SSYNC Forwarded */
+	   if ( up->rphase == 951*MS ) {
+		printf("\nrhase_58 "); 
+		epobuf[epoch] += (mfsync - epobuf[epoch]) / up->avgint;
+		up->eposnr = wwv_snrer(up->epomax, fabs(epobuf[epoch]));
+		if ( up->alarm & 1&& up->datsnr >9 ) {
+		up->rsec++;
+		up->mphase = up->mphase + SECOND;
+		printf("\nrhase_58_2 %f %f",up->datsnr); 
+		}
+	   }  
+	   if ( up->rphase == 1 ) { 
+		epomax = 0.0;
+		up->onprt = 0;
+		up->tepoch = 0;
+	   }  
+	
+
+
+	}
+}  /* MSYNCRO engage if */
 }
 static void jjy_qrz(
         struct peer *peer,      /* peer structure pointer */
@@ -1459,8 +1481,8 @@ static void jjy_qrz(
 					epoch_qrz = sp->pos + (MINUTE - sp->lastpos);
 				}
 				if (abs(epoch_qrz - SECOND)  < AWND * MS) {      //  10ms
-					sp->reach = 4 - 1;
-					sp->count = 2;
+					sp->reach = 8 - 1;
+					sp->count = 3;
 					sp->mepoch =  sp->lastpos;  //  adj minepoch
 			                sp->lastpos = sp->pos;
 				}
@@ -1477,8 +1499,7 @@ static void jjy_qrz(
 	 * sync pulse
 	 */
 if (up->mphase % SECOND == 0) {
-		sp->amp = sp->maxeng /20;
-         	drawColor2(&(sp->amp), 20,400);
+         	drawColor2(&(sp->countdog), 20,400);
 		printf("  %d:%x  ",sp->count,sp->reach);
 }
 	if (up->mphase == 0) {
@@ -1492,6 +1513,7 @@ if (up->mphase % SECOND == 0) {
 			if (abs(epoch_qrz) < AWND * MS) {      //  10ms 
 				sp->reach |= 1;
 				sp->count++;
+				printf("noiz_epochDebug:%f  ",sp->noieng);
 			}
 		}
 		if (up->watch > ACQSN) {
@@ -1714,7 +1736,7 @@ wwv_endpoc(
 	/* if (tmp2 == 0) { */
 
 	tmp2 = (tepoch - xepoch) % SECOND;
-	if (tmp2 <= 5 || tmp2 >= -5) {
+	if (tmp2 <= 3 || tmp2 >= -3) {
 		syncnt++;
 	/*	if (syncnt > SCMP && up->status & MSYNC && (up->status & */
 		if (syncnt > SCMP && (up->status & FGATE || scount - zcount <= up->avgint)) {
@@ -1921,7 +1943,7 @@ wwv_epoch(
 	$if (up->rphase == 200 * MS) {
 	*/
 	if (up->rphase == 300 * MS) {
-		sigzer = up->irig;
+	/*	sigzer = up->irig;	*/
 		engmax = sqrt(up->irig * up->irig + up->qrig *
 		    up->qrig);
 		up->datpha = up->qrig / up->avgint;
@@ -1937,15 +1959,15 @@ wwv_epoch(
 	}
 
 	/*
-	 * Latch the data signal at 500 ms. Keep this around until the
-	 * end of the second.
+	 * data signal is not needed. 
 	 */
 	 /* weighted 800ms
 	else if (up->rphase == 500 * MS)
-	*/
+	
 	else if (up->rphase == 800 * MS) {
 		sigone = up->irig;
 	}
+	*/
 	/*
 	 * At the end of the second crank the clock state machine and
 	 * adjust the codec gain. Note the epoch is buffered from the
@@ -2185,8 +2207,7 @@ wwv_rsec(
 
 	case COEF:			/* 10-13, 15-17, 20-23, 25-26,
 					   30-33, 35-38, 40-41, 51-54 */
-		/* if (up->status & DSYNC) */
-		if (1)
+		if (up->status & DSYNC) 
 			bcddld[arg] = bit;
 		else
 			bcddld[arg] = 0;
@@ -2461,7 +2482,6 @@ wwv_corr4(
 		up->status |= BGATE;
 	} else {
 		up->status |= DSYNC;
-		printf("       signal enogh \n");
 		if (vp->digit != mldigit) {
 			vp->count = 0;
 			up->alarm |= CMPERR;
